@@ -96,7 +96,7 @@ public class Store {
     }
   
    public ProductSpec getProductSpec(String upc) {
-       return this.getProductSpec(upc);
+       return productCatalog.get(upc);
    }
    
    

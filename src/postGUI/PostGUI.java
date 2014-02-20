@@ -22,7 +22,7 @@ public class PostGUI extends javax.swing.JFrame {
 
     private Store store;
     private Transaction transaction;
-
+    private ProductSpec productSpec;
     
     /**
      * Creates new form PostGUI
@@ -73,9 +73,10 @@ public class PostGUI extends javax.swing.JFrame {
         qtyLabel = new javax.swing.JLabel();
         uPriceLabel = new javax.swing.JLabel();
         ePriceLabel = new javax.swing.JLabel();
-        invoiceText = new javax.swing.JTextField();
         totalLabel = new javax.swing.JLabel();
         totalAmount = new javax.swing.JLabel();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        invoiceTextArea = new javax.swing.JTextArea();
         paymentPanel = new javax.swing.JPanel();
         paymentLabel = new javax.swing.JLabel();
         paymentComboBox = new javax.swing.JComboBox();
@@ -183,14 +184,26 @@ public class PostGUI extends javax.swing.JFrame {
 
         totalAmount.setText("$0");
 
+        invoiceTextArea.setColumns(20);
+        invoiceTextArea.setRows(5);
+        jScrollPane1.setViewportView(invoiceTextArea);
+
         javax.swing.GroupLayout invoicePanelLayout = new javax.swing.GroupLayout(invoicePanel);
         invoicePanel.setLayout(invoicePanelLayout);
         invoicePanelLayout.setHorizontalGroup(
             invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(invoiceText, javax.swing.GroupLayout.Alignment.TRAILING)
             .addGroup(invoicePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(invoicePanelLayout.createSequentialGroup()
+                        .addComponent(jScrollPane1)
+                        .addContainerGap())
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, invoicePanelLayout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(39, 39, 39))
                     .addGroup(invoicePanelLayout.createSequentialGroup()
                         .addComponent(itemLabel)
                         .addGap(156, 156, 156)
@@ -199,13 +212,7 @@ public class PostGUI extends javax.swing.JFrame {
                         .addComponent(uPriceLabel)
                         .addGap(69, 69, 69)
                         .addComponent(ePriceLabel)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(invoicePanelLayout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(totalLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(totalAmount, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(39, 39, 39))))
+                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
         invoicePanelLayout.setVerticalGroup(
             invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -216,7 +223,7 @@ public class PostGUI extends javax.swing.JFrame {
                     .addComponent(uPriceLabel)
                     .addComponent(ePriceLabel))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(invoiceText, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 236, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(invoicePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(totalLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 23, Short.MAX_VALUE)
@@ -277,7 +284,7 @@ public class PostGUI extends javax.swing.JFrame {
             .addGroup(timePanelLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(currentTime, javax.swing.GroupLayout.PREFERRED_SIZE, 177, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(58, Short.MAX_VALUE))
+                .addContainerGap(48, Short.MAX_VALUE))
         );
         timePanelLayout.setVerticalGroup(
             timePanelLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -292,11 +299,11 @@ public class PostGUI extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(timePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(paymentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-            .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(timePanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(paymentPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(namePanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -331,8 +338,16 @@ public class PostGUI extends javax.swing.JFrame {
 //        ProductSpec productSpec = store.getProductSpec(upc);
 //        TransactionItem transItem = new TransactionItem(amount, upc, productSpec.getDescription(), productSpec.getPrice());
 //        transaction.addTransItem(transItem);
-        Object upc = this.upcComboBox.getSelectedItem();
-        System.out.println("erddfbdf");
+        String upc = (String) this.upcComboBox.getSelectedItem();
+        int numProduct = Integer.parseInt((String) this.quantityComboBox.getSelectedItem());
+        System.out.println("selected upc");
+        productSpec = store.getProductSpec(upc);
+        TransactionItem transItem = new TransactionItem(numProduct, upc, productSpec.getDescription(), productSpec.getPrice());
+        String formatItem = invoiceTextArea.getSelectedText();
+        formatItem += String.format("%-22s %5d %22.2f %22.2f\n",
+                transItem.getName(), transItem.getQuantity(), transItem.getUnitPrice(), transItem.getExtendedPrice());
+//        invoiceTextField.getSelectedText();
+        invoiceTextArea.setText(formatItem);
 //        currentTime.setText(""+ new Date());//get new time
 //        
 //        String itemDet = "giraffe"; //get through rmi
@@ -435,8 +450,9 @@ public class PostGUI extends javax.swing.JFrame {
     private javax.swing.JLabel ePriceLabel;
     private javax.swing.JButton enterButton;
     private javax.swing.JPanel invoicePanel;
-    private javax.swing.JTextField invoiceText;
+    private javax.swing.JTextArea invoiceTextArea;
     private javax.swing.JLabel itemLabel;
+    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JLabel nameLabel;
     private javax.swing.JPanel namePanel;
     private javax.swing.JTextField nameTextField;
