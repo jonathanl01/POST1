@@ -13,6 +13,7 @@ import javax.swing.text.JTextComponent;
 import post.Store;
 import product.ProductSpec;
 import transaction.Transaction;
+import transaction.TransactionHeader;
 import transaction.TransactionItem;
 /**
  *
@@ -244,6 +245,11 @@ public class PostGUI extends javax.swing.JFrame {
                 payButtonMouseClicked(evt);
             }
         });
+        payButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                payButtonActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout paymentPanelLayout = new javax.swing.GroupLayout(paymentPanel);
         paymentPanel.setLayout(paymentPanelLayout);
@@ -333,21 +339,18 @@ public class PostGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_nameTextFieldActionPerformed
 
     private void enterButtonMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_enterButtonMouseClicked
-//        String upc = this.upcComboBox.getSelectedItem().toString();
-//        int amount = Integer.parseInt(this.quantityComboBox.getSelectedItem().toString());
-//        ProductSpec productSpec = store.getProductSpec(upc);
-//        TransactionItem transItem = new TransactionItem(amount, upc, productSpec.getDescription(), productSpec.getPrice());
-//        transaction.addTransItem(transItem);
         String upc = (String) this.upcComboBox.getSelectedItem();
-        int numProduct = Integer.parseInt((String) this.quantityComboBox.getSelectedItem());
-        System.out.println("selected upc");
         productSpec = store.getProductSpec(upc);
-        TransactionItem transItem = new TransactionItem(numProduct, upc, productSpec.getDescription(), productSpec.getPrice());
-        String formatItem = invoiceTextArea.getSelectedText();
-        formatItem += String.format("%-22s %5d %22.2f %22.2f\n",
+        TransactionItem transItem = new TransactionItem(Integer.parseInt((String) this.quantityComboBox.getSelectedItem()), 
+                upc, productSpec.getDescription(), productSpec.getPrice());
+        
+        String formatItem = String.format("%-22s %30d %22.2f %22.2f\n",
                 transItem.getName(), transItem.getQuantity(), transItem.getUnitPrice(), transItem.getExtendedPrice());
-//        invoiceTextField.getSelectedText();
-        invoiceTextArea.setText(formatItem);
+        invoiceTextArea.append(formatItem);
+        transaction.addTransItem(transItem);
+        
+        totalAmount.setText("$" + String.valueOf(transaction.getTotal()) + "0");
+        System.out.println(transaction.getTotal());
 //        currentTime.setText(""+ new Date());//get new time
 //        
 //        String itemDet = "giraffe"; //get through rmi
@@ -373,6 +376,12 @@ public class PostGUI extends javax.swing.JFrame {
             //print invoice;
         }
     }//GEN-LAST:event_payButtonMouseClicked
+
+    private void payButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_payButtonActionPerformed
+        // TODO add your handling code here:
+        TransactionHeader transHeader = new TransactionHeader("Ziga", nameTextField.getSelectedText());
+        transaction.setTransHeader(transHeader);
+    }//GEN-LAST:event_payButtonActionPerformed
 
     public static void createAndShow(final Store store) {
         /* Set the Nimbus look and feel */
