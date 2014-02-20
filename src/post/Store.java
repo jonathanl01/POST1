@@ -38,7 +38,6 @@ public class Store {
      */
     public void open(String catalogueFileName, String managerName, String storeName) throws IOException {
         dailyTotalPayments = 0.0;
-        dailyTransactions = new ArrayList();
         productCatalog = ProductReader.getCatalog(catalogueFileName);
         this.storeName = storeName;
         dailyInvoices = new ArrayList<Invoice>();

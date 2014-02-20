@@ -23,7 +23,7 @@ public class TransactionHeader {
         return this.storeName;
     }
     
-    public String getcustomerName() {
+    public String getCustomerName() {
         return this.customerName;
     }
     
